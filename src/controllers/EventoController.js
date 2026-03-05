@@ -1,14 +1,4 @@
-// No método store do EventoController.js, ANTES de chamar EventoModel.criar():
-// 1. Nome não pode ser vazio (só espaços)
-if (!nome || nome.trim() === "") {
-    // O que retornar aqui? Qual status e mensagem?
-    // _______________________________________________
-}
-// 2. Capacidade deve ser um número positivo (se informada)
-if (capacidade !== undefined && _________________________) {
-    // Complete a condição acima e o retorno
-    // _______________________________________________
-}
+
 
 // src/controllers/EventoController.js
 const EventoModel = require("../models/EventoModel");
@@ -33,6 +23,18 @@ function store(req, res) {
     if (!nome || !data) {
         return res.status(400).json({ erro: "Nome e data são obrigatórios" });
     }
+    // No método store do EventoController.js, ANTES de chamar EventoModel.criar():
+    // 1. Nome não pode ser vazio (só espaços)
+    if (!nome || nome.trim() === "") {
+        // O que retornar aqui? Qual status e mensagem?
+        // _______________________________________________
+    }
+    // 2. Capacidade deve ser um número positivo (se informada)
+    if (capacidade !== undefined && _________________________) {
+        // Complete a condição acima e o retorno
+        // _______________________________________________
+    }
+
     const novoEvento = EventoModel.criar({
         nome,
         descricao,
