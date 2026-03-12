@@ -1,13 +1,11 @@
-
-
 // src/controllers/EventoController.js
 const EventoModel = require("../models/EventoModel");
-// GET /eventos — listar todos
+
 function index(req, res) {
     const eventos = EventoModel.listarTodos();
     res.json(eventos);
 }
-// GET /eventos/:id — buscar por ID
+
 function show(req, res) {
     const id = parseInt(req.params.id);
     const evento = EventoModel.buscarPorId(id);
@@ -16,23 +14,25 @@ function show(req, res) {
     }
     res.json(evento);
 }
-// POST /eventos — criar novo
+
 function store(req, res) {
     const { nome, descricao, data, local, capacidade } = req.body;
-    // Validação simples
-    if (!nome || !data) {
-        return res.status(400).json({ erro: "Nome e data são obrigatórios" });
-    }
-    // No método store do EventoController.js, ANTES de chamar EventoModel.criar():
+
     // 1. Nome não pode ser vazio (só espaços)
     if (!nome || nome.trim() === "") {
-        // O que retornar aqui? Qual status e mensagem?
-        // _______________________________________________
+        // Correção: Retornar o status 400 usando o 'res' do Express
+        return res.status(400).json({ erro: "O campo nome é obrigatório e não pode estar vazio." });
     }
+    
+    // Validação de data
+    if (!data) {
+        return res.status(400).json({ erro: "O campo data é obrigatório." });
+    }
+
     // 2. Capacidade deve ser um número positivo (se informada)
-    if (capacidade !== undefined && _________________________) {
-        // Complete a condição acima e o retorno
-        // _______________________________________________
+    // Correção: Verifica se foi informada e se é menor ou igual a zero
+    if (capacidade !== undefined && capacidade <= 0) {
+        return res.status(400).json({ erro: "A capacidade deve ser um número positivo maior que zero." });
     }
 
     const novoEvento = EventoModel.criar({
@@ -44,7 +44,6 @@ function store(req, res) {
     });
     res.status(201).json(novoEvento);
 }
-// PUT /eventos/:id — atualizar
 
 function update(req, res) {
     const id = parseInt(req.params.id);
@@ -54,7 +53,7 @@ function update(req, res) {
     }
     res.json(eventoAtualizado);
 }
-// DELETE /eventos/:id — deletar
+
 function destroy(req, res) {
     const id = parseInt(req.params.id);
     const deletado = EventoModel.deletar(id);
@@ -62,11 +61,8 @@ function destroy(req, res) {
         return res.status(404).json({ erro: "Evento não encontrado" });
     }
     res.status(204).send();
-
-
-
-
 }
+
 module.exports = {
     index,
     show,
