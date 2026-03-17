@@ -1,20 +1,20 @@
 // src/app.js
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 const app = express();
-
-
-// Middleware para ler JSON no body
+// Middlewares
 app.use(express.json());
-// Importar rotas
-const participanteRoutes = require("./routes/participanteRoutes");
+// Documentação Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Rotas
 const eventoRoutes = require("./routes/eventoRoutes");
-const inscricaoRoutes = require("./routes/InscricaoRoutes");
-
+const participanteRoutes = require("./routes/participanteRoutes");
+const inscricaoRoutes = require("./routes/inscricaoRoutes");
+app.use("/eventos", eventoRoutes);
 app.use("/participantes", participanteRoutes);
 app.use("/inscricoes", inscricaoRoutes);
-// Usar rotas com prefixo
-app.use("/eventos", eventoRoutes);
-// Rota raiz (informativa)
+// Rota raiz
 app.get("/", (req, res) => {
     res.json({
         mensagem: "API de Notificações",
@@ -22,8 +22,8 @@ app.get("/", (req, res) => {
             eventos: "/eventos",
             participantes: "/participantes",
             inscricoes: "/inscricoes",
+            documentacao: "/api-docs",
         },
     });
 });
-
 module.exports = app;
